@@ -202,24 +202,25 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
   const newUserData = {
     name: req.body.name,
     email: req.body.email,
+    avatar: req.body.avatar,
   };
-  if (req.body.avatar !== "") {
-    const user = await User.findById(req.user.id);
-    if (user.avatar.public_id) {
-      const imageId = user.avatar.public_id;
+  // if (req.body.avatar !== "") {
+  //   const user = await User.findById(req.user.id);
+  //   if (user.avatar.public_id) {
+  //     const imageId = user.avatar.public_id;
 
-      await cloudinary.uploader.destroy(imageId);
-    }
-    const myCloud = await cloudinary.uploader.upload(req.body.avatar, {
-      folder: "avatars",
-      width: 150,
-      crop: "scale",
-    });
-    newUserData.avatar = {
-      public_id: myCloud.public_id,
-      url: myCloud.secure_url,
-    };
-  }
+  //     await cloudinary.uploader.destroy(imageId);
+  //   }
+  //   const myCloud = await cloudinary.uploader.upload(req.body.avatar, {
+  //     folder: "avatars",
+  //     width: 150,
+  //     crop: "scale",
+  //   });
+  //   newUserData.avatar = {
+  //     public_id: myCloud.public_id,
+  //     url: myCloud.secure_url,
+  //   };
+  // }
   // we add cloudinary letter then we are giving condition for the avatar
   const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
     new: true,
